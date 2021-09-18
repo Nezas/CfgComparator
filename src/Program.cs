@@ -7,8 +7,11 @@ namespace CfgComparator
     {
         static void Main(string[] args)
         {
-            var source = Reader.Read("../../../CfgData/FMB001-default.cfg");
-            var target = Reader.Read("../../../CfgData/FMB920-default.cfg");
+            Record source = Reader.Read("../../../CfgData/FMB001-default.cfg");
+            Record target = Reader.Read("../../../CfgData/FMB920-default.cfg");
+
+            Comparator comparator = new();
+            comparator.Compare(source, target);
         }
     }
 }
