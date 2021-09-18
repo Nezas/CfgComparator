@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using CfgComparator.Models;
 
 namespace CfgComparator
@@ -18,8 +19,16 @@ namespace CfgComparator
                 {
                     var id = splitPair[0];
                     var value = splitPair[1];
+
                     Parameter parameter = new(id, value);
-                    record.Parameters.Add(parameter);
+                    if(id.All(char.IsDigit))
+                    { 
+                        record.Parameters.Add(parameter);
+                    }
+                    else
+                    {
+                        record.InfoParameters.Add(parameter);
+                    }
                 }
                 else break;
             }
