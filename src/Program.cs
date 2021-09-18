@@ -1,5 +1,6 @@
 ﻿using System;
 using CfgComparator.Models;
+using CfgComparator.Writers;
 
 namespace CfgComparator
 {
@@ -12,6 +13,9 @@ namespace CfgComparator
 
             Comparator comparator = new();
             comparator.Compare(source, target);
+
+            Output output = new(new ConsoleWriter());
+            output.InfoParameters(source, target);
         }
     }
 }
