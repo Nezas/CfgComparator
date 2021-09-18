@@ -1,4 +1,5 @@
 ﻿using System;
+using CfgComparator.Models;
 
 namespace CfgComparator
 {
@@ -6,7 +7,8 @@ namespace CfgComparator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var source = Reader.Read("../../../CfgData/FMB001-default.cfg");
+            var target = Reader.Read("../../../CfgData/FMB920-default.cfg");
         }
     }
 }
