@@ -19,23 +19,20 @@ namespace CfgComparator
                 var sourceId = sourceDataPair.Id;
                 var sourceValue = sourceDataPair.Value;
 
-                if(sourceId.All(char.IsDigit))
+                var targetData = target.Parameters.Find(x => x.Id == sourceId);
+                if(targetData == null)
                 {
-                    var targetData = target.Parameters.Find(x => x.Id == sourceId);
-                    if(targetData == null)
+                    Removed.Add(sourceId + " " + sourceValue + " " + " " + "Removed;");
+                }
+                else
+                {
+                    if(sourceValue == targetData.Value)
                     {
-                        Removed.Add(sourceId + " " + sourceValue + " " + " " + "Removed;");
+                        Unchanged.Add(sourceId + " " + sourceValue + " " + targetData.Value + " " + "Unchanged;");
                     }
                     else
                     {
-                        if(sourceValue == targetData.Value)
-                        {
-                            Unchanged.Add(sourceId + " " + sourceValue + " " + targetData.Value + " " + "Unchanged;");
-                        }
-                        else
-                        {
-                            Modified.Add(sourceId + " " + sourceValue + " " + targetData.Value + " " + "Modified;");
-                        }
+                        Modified.Add(sourceId + " " + sourceValue + " " + targetData.Value + " " + "Modified;");
                     }
                 }
             }
@@ -45,13 +42,10 @@ namespace CfgComparator
                 var targetId = targetDataPair.Id;
                 var targetValue = targetDataPair.Value;
 
-                if(targetId.All(char.IsDigit))
+                var sourceData = source.Parameters.Find(x => x.Id == targetId);
+                if(sourceData == null)
                 {
-                    var sourceData = source.Parameters.Find(x => x.Id == targetId);
-                    if(sourceData == null)
-                    {
-                        Added.Add(targetId + " " + " " + targetValue + " " + "Added;");
-                    }
+                    Added.Add(targetId + " " + " " + targetValue + " " + "Added;");
                 }
             }
         }
