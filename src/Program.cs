@@ -16,6 +16,7 @@ namespace CfgComparator
 
             Output output = new(new ConsoleWriter());
             output.InfoParameters(source, target, comparator);
+            output.Parameters(comparator);
         }
     }
 }
