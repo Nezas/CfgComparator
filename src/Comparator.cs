@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using CfgComparator.Models;
 
 namespace CfgComparator
@@ -22,17 +20,17 @@ namespace CfgComparator
                 var targetData = target.Parameters.Find(x => x.Id == sourceId);
                 if(targetData == null)
                 {
-                    Removed.Add(sourceId + " " + sourceValue + " " + " " + "Removed;");
+                    Removed.Add($"{sourceId},{sourceValue}, ,Removed;");
                 }
                 else
                 {
                     if(sourceValue == targetData.Value)
                     {
-                        Unchanged.Add(sourceId + " " + sourceValue + " " + targetData.Value + " " + "Unchanged;");
+                        Unchanged.Add($"{sourceId},{sourceValue},{targetData.Value},Unchanged;");
                     }
                     else
                     {
-                        Modified.Add(sourceId + " " + sourceValue + " " + targetData.Value + " " + "Modified;");
+                        Modified.Add($"{sourceId},{sourceValue},{targetData.Value},Modified;");
                     }
                 }
             }
@@ -45,7 +43,7 @@ namespace CfgComparator
                 var sourceData = source.Parameters.Find(x => x.Id == targetId);
                 if(sourceData == null)
                 {
-                    Added.Add(targetId + " " + " " + targetValue + " " + "Added;");
+                    Added.Add($"{targetId}, ,{targetValue},Added;");
                 }
             }
         }

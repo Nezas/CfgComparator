@@ -16,8 +16,8 @@ namespace CfgComparator
         public void InfoParameters(Record source, Record target)
         {
             _writer.Write("Content\n");
-            _writer.Write(String.Format("{0,-40}", $"{source.Name}"));
-            _writer.Write("|   ");
+            _writer.Write(String.Format("{0,-40}", $"\n{source.Name}"));
+            _writer.Write(" |   ");
             _writer.Write($"{target.Name}\n");
             for(int i = 0; i < source.InfoParameters.Count; i++)
             {
