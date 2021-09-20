@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using CfgComparator.Models;
 using CfgComparator.Writers;
@@ -26,7 +25,7 @@ namespace CfgComparator
                 comparator.Compare(source, target);
 
                 Menu menu = new(source, target, comparator.Unchanged, comparator.Modified, comparator.Removed, comparator.Added, output);
-                menu.Start();
+                menu.MainMenu();
             }
             catch(FileNotFoundException ex)
             {

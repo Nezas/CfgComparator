@@ -25,7 +25,7 @@ namespace CfgComparator
             Output = output;
         }
 
-        public void Start()
+        public void MainMenu()
         {
             MenuText();
 
@@ -40,6 +40,7 @@ namespace CfgComparator
                             string choice = Console.ReadLine();
                             Console.WriteLine();
                             FilterParameters(choice);
+                            ContinueToMenu();
                             break;
                         }
                     case "2":
@@ -115,7 +116,6 @@ namespace CfgComparator
             filteredParameters.AddRange(Unchanged.FindAll(x => x.StartsWith(choice)));
 
             Output.Parameters(filteredParameters);
-            ContinueToMenu();
         }
     }
 }
