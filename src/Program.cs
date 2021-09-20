@@ -20,8 +20,8 @@ namespace CfgComparator
             List<string> added= comparator.Added;
 
             Output output = new(new ConsoleWriter());
-            output.InfoParameters(source, target, unchanged, modified, removed, added);
-            output.Parameters(modified);
+            Menu menu = new(source, target, unchanged, modified, removed, added, output);
+            menu.Start();
         }
     }
 }

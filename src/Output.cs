@@ -31,7 +31,6 @@ namespace CfgComparator
 
         public void Parameters(List<string> status)
         {
-            _writer.Write("\nParameters\n");
             _writer.Write(String.Format("{0,-6}   {1,-15}   {2,-15}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
             foreach(var result in status)
             {
