@@ -35,8 +35,20 @@ namespace CfgComparator
             foreach(var result in status)
             {
                 var splittedResult = result.Split(',');
+                Console.BackgroundColor = GetBackgroundColor(splittedResult[3]);
+                Console.ForegroundColor = ConsoleColor.Black;
                 _writer.Write(String.Format("{0,-6} | {1,-15} | {2,-15} | {3,6}", $"{splittedResult[0]}", $"{splittedResult[1]}", $"{splittedResult[2]}", $"{splittedResult[3]}\n"));
+                Console.ResetColor();
             }
+        }
+
+        private ConsoleColor GetBackgroundColor(string status)
+        {
+            if(status == "Unchanged") return ConsoleColor.Gray;
+            else if(status == "Added") return ConsoleColor.Green;
+            else if(status == "Removed") return ConsoleColor.Red;
+            else if(status == "Modified") return ConsoleColor.Yellow;
+            return ConsoleColor.Black;
         }
     }
 }
