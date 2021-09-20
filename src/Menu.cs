@@ -36,8 +36,10 @@ namespace CfgComparator
                     case "1":
                         {
                             Console.Clear();
-                            //
-                            ContinueToMenu();
+                            Console.Write("Enter id: ");
+                            string choice = Console.ReadLine();
+                            Console.WriteLine();
+                            FilterParameters(choice);
                             break;
                         }
                     case "2":
@@ -101,6 +103,19 @@ namespace CfgComparator
             Console.WriteLine("\nPress any key to continue.");
             Console.ReadKey();
             MenuText();
+        }
+
+        private void FilterParameters(string choice)
+        {
+            List<string> filteredParameters = new();
+
+            filteredParameters.AddRange(Removed.FindAll(x => x.StartsWith(choice)));
+            filteredParameters.AddRange(Added.FindAll(x => x.StartsWith(choice)));
+            filteredParameters.AddRange(Modified.FindAll(x => x.StartsWith(choice)));
+            filteredParameters.AddRange(Unchanged.FindAll(x => x.StartsWith(choice)));
+
+            Output.Parameters(filteredParameters);
+            ContinueToMenu();
         }
     }
 }
