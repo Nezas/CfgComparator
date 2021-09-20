@@ -31,13 +31,13 @@ namespace CfgComparator
 
         public void Parameters(List<string> status)
         {
-            _writer.Write(String.Format("{0,-6}   {1,-15}   {2,-15}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
+            _writer.Write(String.Format("{0,-10}   {1,-30}   {2,-30}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
             foreach(var result in status)
             {
                 var splittedResult = result.Split(',');
                 Console.BackgroundColor = GetBackgroundColor(splittedResult[3]);
                 Console.ForegroundColor = ConsoleColor.Black;
-                _writer.Write(String.Format("{0,-6} | {1,-15} | {2,-15} | {3,6}", $"{splittedResult[0]}", $"{splittedResult[1]}", $"{splittedResult[2]}", $"{splittedResult[3]}\n"));
+                _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{splittedResult[0]}", $"{splittedResult[1]}", $"{splittedResult[2]}", $"{splittedResult[3]}\n"));
                 Console.ResetColor();
             }
         }
