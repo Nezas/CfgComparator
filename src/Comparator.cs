@@ -3,6 +3,9 @@ using CfgComparator.Models;
 
 namespace CfgComparator
 {
+    /// <summary>
+    /// Compares two configuration files.
+    /// </summary>
     public class Comparator
     {
         public List<string> Unchanged { get; } = new();
@@ -10,6 +13,11 @@ namespace CfgComparator
         public List<string> Removed { get; } = new();
         public List<string> Modified { get; } = new();
 
+        /// <summary>
+        /// Compares two given <see cref="Record"/>.
+        /// </summary>
+        /// <param name="source">Source configuration file.</param>
+        /// <param name="target">Target configuration file.</param>
         public void Compare(Record source, Record target)
         {
             foreach(var sourceDataPair in source.Parameters)

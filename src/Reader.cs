@@ -5,8 +5,16 @@ using CfgComparator.Models;
 
 namespace CfgComparator
 {
+    /// <summary>
+    /// Reads configuration files data.
+    /// </summary>
     public static class Reader
     {
+        /// <summary>
+        /// Reads data from the given configuration file path.
+        /// </summary>
+        /// <param name="filePath">Configuration file path.</param>
+        /// <returns></returns>
         public static Record Read(string filePath)
         {
             string fileData = ReadFromFile(filePath);

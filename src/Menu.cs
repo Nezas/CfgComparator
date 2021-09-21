@@ -4,6 +4,9 @@ using CfgComparator.Models;
 
 namespace CfgComparator
 {
+    /// <summary>
+    /// Console UI.
+    /// </summary>
     public class Menu
     {
         public Record Source { get; }
@@ -25,6 +28,9 @@ namespace CfgComparator
             Output = output;
         }
 
+        /// <summary>
+        /// Shows <see cref="MenuText"></see> and executes selected option.
+        /// </summary>
         public void MainMenu()
         {
             MenuText();
@@ -37,9 +43,9 @@ namespace CfgComparator
                         {
                             Console.Clear();
                             Console.Write("Enter id: ");
-                            string choice = Console.ReadLine();
+                            string id = Console.ReadLine();
                             Console.WriteLine();
-                            FilterParameters(choice);
+                            FilterParameters(id);
                             ContinueToMenu();
                             break;
                         }
@@ -85,6 +91,10 @@ namespace CfgComparator
                 }
             }
         }
+
+        /// <summary>
+        /// Text to be displayed on the menu screen.
+        /// </summary>
         private void MenuText()
         {
             Console.Clear();
@@ -99,6 +109,9 @@ namespace CfgComparator
             Console.Write("\nEnter your choice: ");
         }
 
+        /// <summary>
+        /// Navigates user to the menu screen.
+        /// </summary>
         private void ContinueToMenu()
         {
             Console.WriteLine("\nPress any key to continue.");
@@ -106,14 +119,18 @@ namespace CfgComparator
             MenuText();
         }
 
-        private void FilterParameters(string choice)
+        /// <summary>
+        /// Filters parameters by the given id.
+        /// </summary>
+        /// <param name="id">User given id.</param>
+        private void FilterParameters(string id)
         {
             List<string> filteredParameters = new();
 
-            filteredParameters.AddRange(Removed.FindAll(x => x.StartsWith(choice)));
-            filteredParameters.AddRange(Added.FindAll(x => x.StartsWith(choice)));
-            filteredParameters.AddRange(Modified.FindAll(x => x.StartsWith(choice)));
-            filteredParameters.AddRange(Unchanged.FindAll(x => x.StartsWith(choice)));
+            filteredParameters.AddRange(Removed.FindAll(x => x.StartsWith(id)));
+            filteredParameters.AddRange(Added.FindAll(x => x.StartsWith(id)));
+            filteredParameters.AddRange(Modified.FindAll(x => x.StartsWith(id)));
+            filteredParameters.AddRange(Unchanged.FindAll(x => x.StartsWith(id)));
 
             Output.Parameters(filteredParameters);
         }

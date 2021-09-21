@@ -2,6 +2,9 @@
 
 namespace CfgComparator.Models
 {
+    /// <summary>
+    /// Holds configuration file data.
+    /// </summary>
     public class Record
     {
         public string Name { get; }
