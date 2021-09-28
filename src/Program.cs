@@ -9,25 +9,30 @@ namespace CfgComparator
     {
         static void Main(string[] args)
         {
-            Comparator comparator = new();
+            ConfigurationsComparator configurationsComparator = new();
             Output output = new(new ConsoleWriter());
 
             try
             {
-                Console.Write("Enter SOURCE configuration file name (with .cfg): ");
+                Console.Write("Enter full SOURCE configuration file path (with .cfg): ");
                 string sourceFile = Console.ReadLine();
-                Record source = Reader.Read($"../../../CfgData/{sourceFile}");
+                ConfigurationData source = ConfigurationFileReader.ReadFromFile($"{sourceFile}");
 
-                Console.Write("Enter TARGET configuration file name (with .cfg): ");
+                Console.Write("Enter full TARGET configuration file path (with .cfg): ");
                 string targetFile = Console.ReadLine();
-                Record target = Reader.Read($"../../../CfgData/{targetFile}");
+                ConfigurationData target = ConfigurationFileReader.ReadFromFile($"{targetFile}");
 
-                comparator.Compare(source, target);
+                ConfigurationsCompareResult configurationsCompareResult = configurationsComparator.Compare(source, target);
 
-                Menu menu = new(source, target, comparator.Unchanged, comparator.Modified, comparator.Removed, comparator.Added, output);
+                Menu menu = new(configurationsCompareResult, output);
                 menu.MainMenu();
             }
             catch(FileNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Environment.Exit(0);
+            }
+            catch(ArgumentException ex)
             {
                 Console.WriteLine(ex.Message);
                 Environment.Exit(0);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CfgComparator.Models;
+using CfgComparator.Enums;
 
 namespace CfgComparator
 {
@@ -9,22 +10,12 @@ namespace CfgComparator
     /// </summary>
     public class Menu
     {
-        public Record Source { get; }
-        public Record Target { get; }
-        public List<string> Unchanged { get; }
-        public List<string> Modified { get; }
-        public List<string> Removed { get; }
-        public List<string> Added { get; }
+        public ConfigurationsCompareResult ConfigurationsCompareResult { get; }
         public Output Output { get; }
 
-        public Menu(Record source, Record target, List<string> unchanged, List<string> modified, List<string> removed, List<string> added, Output output)
+        public Menu(ConfigurationsCompareResult configurationsCompareResult, Output output)
         {
-            Source = source;
-            Target = target;
-            Unchanged = unchanged;
-            Modified = modified;
-            Removed = removed;
-            Added = added;
+            ConfigurationsCompareResult = configurationsCompareResult;
             Output = output;
         }
 
@@ -52,28 +43,28 @@ namespace CfgComparator
                     case "2":
                         {
                             Console.Clear();
-                            Output.Parameters(Unchanged);
+                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Unchanged);
                             ContinueToMenu();
                             break;
                         }
                     case "3":
                         {
                             Console.Clear();
-                            Output.Parameters(Modified);
+                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Modified);
                             ContinueToMenu();
                             break;
                         }
                     case "4":
                         {
                             Console.Clear();
-                            Output.Parameters(Removed);
+                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Removed);
                             ContinueToMenu();
                             break;
                         }
                     case "5":
                         {
                             Console.Clear();
-                            Output.Parameters(Added);
+                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Added);
                             ContinueToMenu();
                             break;
                         }
@@ -98,7 +89,7 @@ namespace CfgComparator
         private void MenuText()
         {
             Console.Clear();
-            Output.InfoParameters(Source, Target, Unchanged, Modified, Removed, Added);
+            Output.InfoParameters(ConfigurationsCompareResult);
             Console.WriteLine("\nOptions:");
             Console.WriteLine("1 - Filter parameters by id");
             Console.WriteLine("2 - Unchanged parameters");
@@ -125,13 +116,7 @@ namespace CfgComparator
         /// <param name="id">User given id.</param>
         private void FilterParameters(string id)
         {
-            List<string> filteredParameters = new();
-
-            filteredParameters.AddRange(Removed.FindAll(x => x.StartsWith(id)));
-            filteredParameters.AddRange(Added.FindAll(x => x.StartsWith(id)));
-            filteredParameters.AddRange(Modified.FindAll(x => x.StartsWith(id)));
-            filteredParameters.AddRange(Unchanged.FindAll(x => x.StartsWith(id)));
-
+            List<ParameterDifference> filteredParameters = ConfigurationsCompareResult.Differences.FindAll(x => x.Id.StartsWith(id));
             Output.Parameters(filteredParameters);
         }
     }

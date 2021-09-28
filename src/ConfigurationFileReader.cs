@@ -6,19 +6,19 @@ using CfgComparator.Models;
 namespace CfgComparator
 {
     /// <summary>
-    /// Reads configuration files data.
+    /// Reads configuration file data.
     /// </summary>
-    public static class Reader
+    public static class ConfigurationFileReader
     {
         /// <summary>
         /// Reads data from the given configuration file path.
         /// </summary>
         /// <param name="filePath">Configuration file path.</param>
-        /// <returns></returns>
-        public static Record Read(string filePath)
+        /// <returns>Returns <see cref="ConfigurationData"/></returns>
+        public static ConfigurationData ReadFromFile(string filePath)
         {
-            string fileData = ReadFromFile(filePath);
-            Record record = new(Path.GetFileName(filePath));
+            string fileData = Read(filePath);
+            ConfigurationData configurationData = new(Path.GetFileName(filePath));
 
             foreach(var dataPair in fileData.Split(';'))
             {
@@ -31,19 +31,19 @@ namespace CfgComparator
                     Parameter parameter = new(id, value);
                     if(id.All(char.IsDigit))
                     { 
-                        record.Parameters.Add(parameter);
+                        configurationData.Parameters.Add(parameter);
                     }
                     else
                     {
-                        record.InfoParameters.Add(parameter);
+                        configurationData.InfoParameters.Add(parameter);
                     }
                 }
                 else break;
             }
-            return record;
+            return configurationData;
         }
 
-        private static string ReadFromFile(string filePath)
+        private static string Read(string filePath)
         {
             using(FileStream file = File.Open(filePath, FileMode.Open))
             using(GZipStream zip = new(file, CompressionMode.Decompress))
