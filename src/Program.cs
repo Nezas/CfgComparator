@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Spectre.Console;
 using CfgComparator.Models;
 using CfgComparator.Writers;
 
@@ -14,12 +15,10 @@ namespace CfgComparator
 
             try
             {
-                Console.Write("Enter full SOURCE configuration file path (with .cfg): ");
-                string sourceFile = Console.ReadLine();
+                string sourceFile = AnsiConsole.Ask<string>("Enter full [red]SOURCE[/] configuration file path (with .cfg): ");
                 ConfigurationData source = ConfigurationFileReader.ReadFromFile($"{sourceFile}");
 
-                Console.Write("Enter full TARGET configuration file path (with .cfg): ");
-                string targetFile = Console.ReadLine();
+                string targetFile = AnsiConsole.Ask<string>("Enter full [red]TARGET[/] configuration file path (with .cfg): ");
                 ConfigurationData target = ConfigurationFileReader.ReadFromFile($"{targetFile}");
 
                 ConfigurationsCompareResult configurationsCompareResult = configurationsComparator.Compare(source, target);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Spectre.Console;
 using CfgComparator.Models;
 using CfgComparator.Enums;
 
@@ -20,84 +21,25 @@ namespace CfgComparator
         }
 
         /// <summary>
-        /// Shows <see cref="MenuText"></see> and executes selected option.
+        /// Shows main menu and executes selected option.
         /// </summary>
         public void MainMenu()
         {
-            MenuText();
-
-            while(true)
-            {
-                switch(Console.ReadLine())
-                {
-                    case "1":
-                        {
-                            Console.Clear();
-                            Console.Write("Enter id: ");
-                            string id = Console.ReadLine();
-                            Console.WriteLine();
-                            FilterParameters(id);
-                            ContinueToMenu();
-                            break;
-                        }
-                    case "2":
-                        {
-                            Console.Clear();
-                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Unchanged);
-                            ContinueToMenu();
-                            break;
-                        }
-                    case "3":
-                        {
-                            Console.Clear();
-                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Modified);
-                            ContinueToMenu();
-                            break;
-                        }
-                    case "4":
-                        {
-                            Console.Clear();
-                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Removed);
-                            ContinueToMenu();
-                            break;
-                        }
-                    case "5":
-                        {
-                            Console.Clear();
-                            Output.Parameters(ConfigurationsCompareResult, ParameterStatus.Added);
-                            ContinueToMenu();
-                            break;
-                        }
-                    case "0":
-                        {
-                            Environment.Exit(0);
-                            break;
-                        }
-                    default:
-                        {
-                            Console.Write("Invalid input!\n");
-                            Console.Write("\nEnter your choice: ");
-                            break;
-                        }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Text to be displayed on the menu screen.
-        /// </summary>
-        private void MenuText()
-        {
             Console.Clear();
             Output.InfoParameters(ConfigurationsCompareResult);
-            Console.WriteLine("\nOptions:");
-            Console.WriteLine("1 - Filter parameters by id");
-            Console.WriteLine("2 - Unchanged parameters");
-            Console.WriteLine("3 - Modified parameters");
-            Console.WriteLine("4 - Removed parameters");
-            Console.WriteLine("5 - Added parameters");
-            Console.WriteLine("0 - Exit");
-            Console.Write("\nEnter your choice: ");
+            Console.WriteLine();
+
+            var filtrationMethod = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Filter parameters by:")
+                    .PageSize(5)
+                    .AddChoice("ID")
+                    .AddChoices(new[] {
+                        "Status",
+                    }));
+
+            ValidateFiltrationMethod(filtrationMethod);
+            ContinueToMenu();
         }
 
         /// <summary>
@@ -107,17 +49,49 @@ namespace CfgComparator
         {
             Console.WriteLine("\nPress any key to continue.");
             Console.ReadKey();
-            MenuText();
+            MainMenu();
         }
 
         /// <summary>
-        /// Filters parameters by the given id.
+        /// Outputs filtered parameters by the given id.
         /// </summary>
         /// <param name="id">User given id.</param>
-        private void FilterParameters(string id)
+        private void OutputFilteredParameters(string id)
         {
             List<ParameterDifference> filteredParameters = ConfigurationsCompareResult.Differences.FindAll(x => x.Id.StartsWith(id));
             Output.Parameters(filteredParameters);
+        }
+
+        /// <summary>
+        /// Validates given filtration method and executes it accoridngly
+        /// </summary>
+        /// <param name="filtrationMethod"></param>
+        private void ValidateFiltrationMethod(string filtrationMethod)
+        {
+            Console.Clear();
+            if(filtrationMethod == "ID")
+            {
+                string id = AnsiConsole.Ask<string>("Enter the id:");
+                OutputFilteredParameters(id);
+            }
+            else if(filtrationMethod == "Status")
+            {
+                var status = AnsiConsole.Prompt(
+                    new MultiSelectionPrompt<ParameterStatus>()
+                        .Title("Select statuses:")
+                        .NotRequired()
+                        .PageSize(7)
+                        .InstructionsText(
+                        "[grey](Press [blue]<space>[/] to toggle an option, " +
+                        "[green]<enter>[/] to execute)[/]").AddChoices(new ParameterStatus[]
+                        {
+                            ParameterStatus.Unchanged,
+                            ParameterStatus.Modified,
+                            ParameterStatus.Removed,
+                            ParameterStatus.Added,
+                        }));
+                Output.Parameters(ConfigurationsCompareResult, status);
+            }
         }
     }
 }
