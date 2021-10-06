@@ -30,12 +30,12 @@ namespace CfgComparator
             Console.WriteLine();
 
             var filtrationMethod = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
+                new SelectionPrompt<FiltrationMethod>()
                     .Title("Filter parameters by:")
                     .PageSize(5)
-                    .AddChoice("ID")
+                    .AddChoice(FiltrationMethod.Id)
                     .AddChoices(new[] {
-                        "Status",
+                        FiltrationMethod.Status,
                     }));
 
             ValidateFiltrationMethod(filtrationMethod);
@@ -63,35 +63,52 @@ namespace CfgComparator
         }
 
         /// <summary>
-        /// Validates given filtration method and executes it accoridngly
+        /// Validates given filtration method and executes it accoridngly.
         /// </summary>
         /// <param name="filtrationMethod"></param>
-        private void ValidateFiltrationMethod(string filtrationMethod)
+        private void ValidateFiltrationMethod(FiltrationMethod filtrationMethod)
+        {
+            if(filtrationMethod == FiltrationMethod.Id)
+            {
+                FiltrateById();
+            }
+            else
+            {
+                FiltrateByStatus();
+            }
+        }
+
+        /// <summary>
+        /// Filtrate parameters by id.
+        /// </summary>
+        private void FiltrateById()
         {
             Console.Clear();
-            if(filtrationMethod == "ID")
-            {
-                string id = AnsiConsole.Ask<string>("Enter the id:");
-                OutputFilteredParameters(id);
-            }
-            else if(filtrationMethod == "Status")
-            {
-                var status = AnsiConsole.Prompt(
-                    new MultiSelectionPrompt<ParameterStatus>()
-                        .Title("Select statuses:")
-                        .NotRequired()
-                        .PageSize(7)
-                        .InstructionsText(
-                        "[grey](Press [blue]<space>[/] to toggle an option, " +
-                        "[green]<enter>[/] to execute)[/]").AddChoices(new ParameterStatus[]
-                        {
-                            ParameterStatus.Unchanged,
-                            ParameterStatus.Modified,
-                            ParameterStatus.Removed,
-                            ParameterStatus.Added,
-                        }));
-                Output.Parameters(ConfigurationsCompareResult, status);
-            }
+            string id = AnsiConsole.Ask<string>("Enter the id:");
+            OutputFilteredParameters(id);
+        }
+
+        /// <summary>
+        /// Filtrate parameters by status.
+        /// </summary>
+        private void FiltrateByStatus()
+        {
+            Console.Clear();
+            var status = AnsiConsole.Prompt(
+                new MultiSelectionPrompt<ParameterStatus>()
+                    .Title("Select statuses:")
+                    .NotRequired()
+                    .PageSize(7)
+                    .InstructionsText(
+                    "[grey](Press [blue]<space>[/] to toggle an option, " +
+                    "[green]<enter>[/] to execute)[/]").AddChoices(new ParameterStatus[]
+                    {
+                        ParameterStatus.Unchanged,
+                        ParameterStatus.Modified,
+                        ParameterStatus.Removed,
+                        ParameterStatus.Added,
+                    }));
+            Output.Parameters(ConfigurationsCompareResult, status);
         }
     }
 }

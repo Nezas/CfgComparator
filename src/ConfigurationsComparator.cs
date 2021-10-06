@@ -28,7 +28,7 @@ namespace CfgComparator
                 var targetData = target.Parameters.Find(x => x.Id == sourceId);
                 if(targetData == null)
                 {
-                    Parameter targetParameter = new(sourceId, "");
+                    Parameter targetParameter = new(sourceId, null);
                     ParameterDifference parameterDifference = new ParameterDifference(sourceId, sourceDataPair, targetParameter, ParameterStatus.Removed);
                     configurationsCompareResult.Differences.Add(parameterDifference);
                 }
@@ -55,7 +55,7 @@ namespace CfgComparator
                 var sourceData = source.Parameters.Find(x => x.Id == targetId);
                 if(sourceData == null)
                 {
-                    Parameter sourceParameter = new(targetId, "");
+                    Parameter sourceParameter = new(targetId, null);
                     ParameterDifference parameterDifference = new ParameterDifference(targetId, sourceParameter, targetDataPair, ParameterStatus.Added);
                     configurationsCompareResult.Differences.Add(parameterDifference);
                 }
