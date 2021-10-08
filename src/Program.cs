@@ -16,14 +16,14 @@ namespace CfgComparator
             try
             {
                 string sourceFile = AnsiConsole.Ask<string>("Enter full [red]SOURCE[/] configuration file path (with .cfg): ");
-                ConfigurationData source = ConfigurationFileReader.ReadFromFile($"{sourceFile}");
+                var source = ConfigurationFileReader.ReadFromFile($"{sourceFile}");
 
                 string targetFile = AnsiConsole.Ask<string>("Enter full [red]TARGET[/] configuration file path (with .cfg): ");
-                ConfigurationData target = ConfigurationFileReader.ReadFromFile($"{targetFile}");
+                var target = ConfigurationFileReader.ReadFromFile($"{targetFile}");
 
-                ConfigurationsCompareResult configurationsCompareResult = configurationsComparator.Compare(source, target);
+                var configurationsCompareResult = configurationsComparator.Compare(source, target);
 
-                Menu menu = new(configurationsCompareResult, output);
+                var menu = new Menu(configurationsCompareResult, output);
                 menu.MainMenu();
             }
             catch(FileNotFoundException ex)

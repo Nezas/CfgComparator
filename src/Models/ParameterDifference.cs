@@ -15,8 +15,8 @@ namespace CfgComparator.Models
         public ParameterDifference(string id, Parameter source, Parameter target, ParameterStatus status)
         {
             Id = id;
-            Source = source;
-            Target = target;
+            Source = source ?? new Parameter(id, "");
+            Target = target ?? new Parameter(id, "");
             Status = status;
         }
     }

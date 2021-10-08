@@ -7,8 +7,15 @@ namespace CfgComparator.Models
     /// </summary>
     public class ConfigurationsCompareResult
     {
-        public ConfigurationData Source { get; set; }
-        public ConfigurationData Target { get; set; }
-        public List<ParameterDifference> Differences { get; set; } = new();
+        public ConfigurationData Source { get; }
+        public ConfigurationData Target { get; }
+        public List<ParameterDifference> Differences { get; set; }
+
+        public ConfigurationsCompareResult(ConfigurationData source, ConfigurationData target)
+        {
+            Source = source;
+            Target = target;
+            Differences = new();
+        }
     }
 }

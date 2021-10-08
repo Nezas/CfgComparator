@@ -16,47 +16,37 @@ namespace CfgComparator
         /// <returns>Returns <see cref="ConfigurationsCompareResult"/></returns>
         public ConfigurationsCompareResult Compare(ConfigurationData source, ConfigurationData target)
         {
-            ConfigurationsCompareResult configurationsCompareResult = new();
-            configurationsCompareResult.Source = source;
-            configurationsCompareResult.Target = target;
+            var configurationsCompareResult = new ConfigurationsCompareResult(source, target);
 
-            foreach(var sourceDataPair in source.Parameters)
+            foreach(var sourceParameter in source.Parameters)
             {
-                var sourceId = sourceDataPair.Id;
-                var sourceValue = sourceDataPair.Value;
-
-                var targetData = target.Parameters.Find(x => x.Id == sourceId);
-                if(targetData == null)
+                var targetParameter = target.Parameters.Find(x => x.Id == sourceParameter.Id);
+                if(targetParameter == null)
                 {
-                    Parameter targetParameter = new(sourceId, null);
-                    ParameterDifference parameterDifference = new ParameterDifference(sourceId, sourceDataPair, targetParameter, ParameterStatus.Removed);
+                    var parameterDifference = new ParameterDifference(sourceParameter.Id, sourceParameter, null, ParameterStatus.Removed);
                     configurationsCompareResult.Differences.Add(parameterDifference);
                 }
                 else
                 {
-                    if(sourceValue == targetData.Value)
+                    if(sourceParameter.Value == targetParameter.Value)
                     {
-                        ParameterDifference parameterDifference = new ParameterDifference(sourceId, sourceDataPair, targetData, ParameterStatus.Unchanged);
+                        var parameterDifference = new ParameterDifference(sourceParameter.Id, sourceParameter, targetParameter, ParameterStatus.Unchanged);
                         configurationsCompareResult.Differences.Add(parameterDifference);
                     }
                     else
                     {
-                        ParameterDifference parameterDifference = new ParameterDifference(sourceId, sourceDataPair, targetData, ParameterStatus.Modified);
+                        var parameterDifference = new ParameterDifference(sourceParameter.Id, sourceParameter, targetParameter, ParameterStatus.Modified);
                         configurationsCompareResult.Differences.Add(parameterDifference);
                     }
                 }
             }
 
-            foreach(var targetDataPair in target.Parameters)
+            foreach(var targetParameter in target.Parameters)
             {
-                var targetId = targetDataPair.Id;
-                var targetValue = targetDataPair.Value;
-
-                var sourceData = source.Parameters.Find(x => x.Id == targetId);
-                if(sourceData == null)
+                var sourceParameter = source.Parameters.Find(x => x.Id == targetParameter.Id);
+                if(sourceParameter == null)
                 {
-                    Parameter sourceParameter = new(targetId, null);
-                    ParameterDifference parameterDifference = new ParameterDifference(targetId, sourceParameter, targetDataPair, ParameterStatus.Added);
+                    var parameterDifference = new ParameterDifference(targetParameter.Id, null, targetParameter, ParameterStatus.Added);
                     configurationsCompareResult.Differences.Add(parameterDifference);
                 }
             }
