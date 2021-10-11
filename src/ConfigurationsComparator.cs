@@ -1,4 +1,6 @@
-﻿using CfgComparator.Models;
+﻿using System.Linq;
+using System.Collections.Generic;
+using CfgComparator.Models;
 using CfgComparator.Enums;
 
 namespace CfgComparator
@@ -17,40 +19,41 @@ namespace CfgComparator
         public ConfigurationsCompareResult Compare(ConfigurationData source, ConfigurationData target)
         {
             var configurationsCompareResult = new ConfigurationsCompareResult(source, target);
+            var allParameters = source.Parameters.Concat(target.Parameters).ToList();
+            List<Parameter> validatedParameters = new();
 
-            foreach(var sourceParameter in source.Parameters)
+            foreach(var parameter in allParameters)
             {
-                var targetParameter = target.Parameters.Find(x => x.Id == sourceParameter.Id);
-                if(targetParameter == null)
-                {
-                    var parameterDifference = new ParameterDifference(sourceParameter.Id, sourceParameter, null, ParameterStatus.Removed);
-                    configurationsCompareResult.Differences.Add(parameterDifference);
-                }
-                else
-                {
-                    if(sourceParameter.Value == targetParameter.Value)
-                    {
-                        var parameterDifference = new ParameterDifference(sourceParameter.Id, sourceParameter, targetParameter, ParameterStatus.Unchanged);
-                        configurationsCompareResult.Differences.Add(parameterDifference);
-                    }
-                    else
-                    {
-                        var parameterDifference = new ParameterDifference(sourceParameter.Id, sourceParameter, targetParameter, ParameterStatus.Modified);
-                        configurationsCompareResult.Differences.Add(parameterDifference);
-                    }
-                }
-            }
+                var sourceParameter = source.Parameters.Find(x => x.Id == parameter.Id);
+                var targetParameter = target.Parameters.Find(x => x.Id == parameter.Id);
 
-            foreach(var targetParameter in target.Parameters)
-            {
-                var sourceParameter = source.Parameters.Find(x => x.Id == targetParameter.Id);
-                if(sourceParameter == null)
+                if(validatedParameters.Find(p => p.Id == parameter.Id) == null)
                 {
-                    var parameterDifference = new ParameterDifference(targetParameter.Id, null, targetParameter, ParameterStatus.Added);
+                    var parameterStatus = GetStatus(parameter, sourceParameter, targetParameter);
+                    var parameterDifference = new ParameterDifference(parameter.Id, sourceParameter, targetParameter, parameterStatus);
                     configurationsCompareResult.Differences.Add(parameterDifference);
+                    validatedParameters.Add(parameter);
                 }
             }
             return configurationsCompareResult;
+        }
+
+        private ParameterStatus GetStatus(Parameter parameter, Parameter sourceParameter, Parameter targetParameter)
+        {
+            if(targetParameter == null) 
+            {
+                return ParameterStatus.Removed;
+            }
+            else if(sourceParameter == null)
+            {
+                return ParameterStatus.Added;
+            }
+
+            if(sourceParameter.Value == targetParameter.Value)
+            {
+                return ParameterStatus.Unchanged;
+            }
+            return ParameterStatus.Modified;
         }
     }
 }

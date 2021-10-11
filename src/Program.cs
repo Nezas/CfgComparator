@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Spectre.Console;
-using CfgComparator.Models;
 using CfgComparator.Writers;
 
 namespace CfgComparator
