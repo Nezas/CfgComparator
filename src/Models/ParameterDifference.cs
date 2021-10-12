@@ -7,10 +7,10 @@ namespace CfgComparator.Models
     /// </summary>
     public class ParameterDifference
     {
-        public string Id { get; set; }
-        public Parameter Source { get; set; }
-        public Parameter Target { get; set; }
-        public ParameterStatus Status { get; set; }
+        public string Id { get; }
+        public Parameter Source { get; }
+        public Parameter Target { get; }
+        public ParameterStatus Status { get; }
 
         public ParameterDifference(string id, Parameter source, Parameter target, ParameterStatus status)
         {
