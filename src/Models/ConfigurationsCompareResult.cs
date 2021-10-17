@@ -9,13 +9,12 @@ namespace CfgComparator.Models
     {
         public ConfigurationData Source { get; }
         public ConfigurationData Target { get; }
-        public List<ParameterDifference> Differences { get; set; }
+        public List<ParameterDifference> Differences { get; set; } = new();
 
         public ConfigurationsCompareResult(ConfigurationData source, ConfigurationData target)
         {
             Source = source;
             Target = target;
-            Differences = new();
         }
     }
 }

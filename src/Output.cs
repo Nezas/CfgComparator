@@ -47,7 +47,7 @@ namespace CfgComparator
         /// <param name="parameterDifferences"></param>
         public void Parameters(List<ParameterDifference> parameterDifferences)
         {
-            _writer.Write(String.Format("{0,-10}   {1,-30}   {2,-30}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
+            _writer.Write(String.Format("\n{0,-10}   {1,-30}   {2,-30}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
             foreach(var difference in parameterDifferences)
             {
                 Console.BackgroundColor = GetBackgroundColor(difference.Status);

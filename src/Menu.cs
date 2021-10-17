@@ -27,73 +27,52 @@ namespace CfgComparator
         {
             Console.Clear();
             Output.InfoParameters(ConfigurationsCompareResult);
-            Console.WriteLine();
 
             var filtrationMethod = AnsiConsole.Prompt(
                 new SelectionPrompt<FiltrationMethod>()
-                    .Title("Filter parameters by:")
+                    .Title("\nFilter parameters by:")
                     .PageSize(5)
                     .AddChoice(FiltrationMethod.Id)
                     .AddChoices(new[] {
                         FiltrationMethod.Status,
                     }));
 
+            Console.Clear();
             ValidateFiltrationMethod(filtrationMethod);
             ContinueToMenu();
         }
 
         /// <summary>
-        /// Navigates user to the menu screen.
-        /// </summary>
-        private void ContinueToMenu()
-        {
-            Console.WriteLine("\nPress any key to continue.");
-            Console.ReadKey();
-            MainMenu();
-        }
-
-        /// <summary>
-        /// Outputs filtered parameters by the given id.
-        /// </summary>
-        /// <param name="id">User given id.</param>
-        private void OutputFilteredParameters(string id)
-        {
-            List<ParameterDifference> filteredParameters = ConfigurationsCompareResult.Differences.FindAll(x => x.Id.StartsWith(id));
-            Output.Parameters(filteredParameters);
-        }
-
-        /// <summary>
-        /// Validates given filtration method and executes it accoridngly.
+        /// Validates given filtration method and executes it accordingly.
         /// </summary>
         /// <param name="filtrationMethod"></param>
         private void ValidateFiltrationMethod(FiltrationMethod filtrationMethod)
         {
             if(filtrationMethod == FiltrationMethod.Id)
             {
-                FiltrateById();
+                FilterById();
             }
             else
             {
-                FiltrateByStatus();
+                FilterByStatus();
             }
         }
 
         /// <summary>
-        /// Filtrate parameters by id.
+        /// Filter parameters by id.
         /// </summary>
-        private void FiltrateById()
+        private void FilterById()
         {
-            Console.Clear();
-            string id = AnsiConsole.Ask<string>("Enter the id:");
-            OutputFilteredParameters(id);
+            string id = AnsiConsole.Ask<string>("Enter the id: ");
+            List<ParameterDifference> filteredParameters = ConfigurationsCompareResult.Differences.FindAll(x => x.Id.StartsWith(id));
+            Output.Parameters(filteredParameters);
         }
 
         /// <summary>
-        /// Filtrate parameters by status.
+        /// Filter parameters by status.
         /// </summary>
-        private void FiltrateByStatus()
+        private void FilterByStatus()
         {
-            Console.Clear();
             var status = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<ParameterStatus>()
                     .Title("Select statuses:")
@@ -110,5 +89,16 @@ namespace CfgComparator
                     }));
             Output.Parameters(ConfigurationsCompareResult, status);
         }
+
+        /// <summary>
+        /// Navigates user to the menu screen.
+        /// </summary>
+        private void ContinueToMenu()
+        {
+            Console.WriteLine("\nPress any key to continue.");
+            Console.ReadKey();
+            MainMenu();
+        }
+
     }
 }
