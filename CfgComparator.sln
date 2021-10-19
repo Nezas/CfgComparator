@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CfgComparator", "src\CfgComparator.csproj", "{A79C45E2-4F1E-4C9B-87CD-1D54FB2ED211}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CfgComparator", "src\CfgComparator.csproj", "{A79C45E2-4F1E-4C9B-87CD-1D54FB2ED211}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CfgComparator.API", "CfgComparator.API\CfgComparator.API.csproj", "{F29FE70A-8E3C-4F34-8056-D8F589897B5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A79C45E2-4F1E-4C9B-87CD-1D54FB2ED211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A79C45E2-4F1E-4C9B-87CD-1D54FB2ED211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A79C45E2-4F1E-4C9B-87CD-1D54FB2ED211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F29FE70A-8E3C-4F34-8056-D8F589897B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F29FE70A-8E3C-4F34-8056-D8F589897B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F29FE70A-8E3C-4F34-8056-D8F589897B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F29FE70A-8E3C-4F34-8056-D8F589897B5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
