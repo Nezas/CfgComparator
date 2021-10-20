@@ -11,12 +11,12 @@ namespace CfgComparator
     public class ConfigurationsComparator
     {
         /// <summary>
-        /// Compares two given <see cref="ConfigurationData"/>.
+        /// Compares two given <see cref="ConfigurationFile"/>.
         /// </summary>
         /// <param name="source">Source configuration file.</param>
         /// <param name="target">Target configuration file.</param>
         /// <returns>Returns <see cref="ConfigurationsCompareResult"/></returns>
-        public ConfigurationsCompareResult Compare(ConfigurationData source, ConfigurationData target)
+        public ConfigurationsCompareResult Compare(ConfigurationFile source, ConfigurationFile target)
         {
             var configurationsCompareResult = new ConfigurationsCompareResult(source, target);
             var allParameters = source.Parameters.Concat(target.Parameters).ToList();

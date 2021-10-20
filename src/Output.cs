@@ -8,7 +8,7 @@ using CfgComparator.Enums;
 namespace CfgComparator
 {
     /// <summary>
-    /// Writes <see cref="ConfigurationData"/> parameters using given <see cref="IWriter"/>.
+    /// Writes <see cref="ConfigurationFile"/> parameters using given <see cref="IWriter"/>.
     /// </summary>
     public class Output
     {

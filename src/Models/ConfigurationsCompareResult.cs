@@ -3,15 +3,15 @@
 namespace CfgComparator.Models
 {
     /// <summary>
-    /// Holds source and target <see cref="ConfigurationData"/> and list of <see cref="ParameterDifference"/>.
+    /// Holds source and target <see cref="ConfigurationFile"/> and list of <see cref="ParameterDifference"/>.
     /// </summary>
     public class ConfigurationsCompareResult
     {
-        public ConfigurationData Source { get; }
-        public ConfigurationData Target { get; }
+        public ConfigurationFile Source { get; }
+        public ConfigurationFile Target { get; }
         public List<ParameterDifference> Differences { get; set; } = new();
 
-        public ConfigurationsCompareResult(ConfigurationData source, ConfigurationData target)
+        public ConfigurationsCompareResult(ConfigurationFile source, ConfigurationFile target)
         {
             Source = source;
             Target = target;

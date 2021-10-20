@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using CfgComparator.Models;
@@ -14,11 +15,11 @@ namespace CfgComparator
         /// Reads data from the given configuration file path.
         /// </summary>
         /// <param name="filePath">Configuration file path.</param>
-        /// <returns>Returns <see cref="ConfigurationData"/></returns>
-        public static ConfigurationData ReadFromFile(string filePath)
+        /// <returns>Returns <see cref="ConfigurationFile"/></returns>
+        public static ConfigurationFile ReadFromFile(string filePath, Stream stream)
         {
-            string fileData = Read(filePath);
-            ConfigurationData configurationData = new(Path.GetFileName(filePath));
+            string fileData = Read(stream);
+            ConfigurationFile configurationData = new(Path.GetFileName(filePath));
 
             foreach(var dataPair in fileData.Split(';'))
             {
@@ -43,10 +44,15 @@ namespace CfgComparator
             return configurationData;
         }
 
-        private static string Read(string filePath)
+        public static ConfigurationFile ReadFromFile(string filePath)
         {
-            using(FileStream file = File.Open(filePath, FileMode.Open))
-            using(GZipStream zip = new(file, CompressionMode.Decompress))
+            using(FileStream fileStream = File.Open(filePath, FileMode.Open))
+            return ReadFromFile(Path.GetFileName(filePath), fileStream);
+        }
+
+        private static string Read(Stream stream)
+        {
+            using(GZipStream zip = new(stream, CompressionMode.Decompress))
             using(StreamReader unzip = new(zip))
             return unzip.ReadToEnd();
         }

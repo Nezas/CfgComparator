@@ -35,6 +35,11 @@ namespace CfgComparator
                 Console.WriteLine(ex.Message);
                 Environment.Exit(0);
             }
+            catch(InvalidDataException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Environment.Exit(0);
+            }
         }
     }
 }
