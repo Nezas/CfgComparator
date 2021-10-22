@@ -2,6 +2,7 @@
 using System.IO;
 using Spectre.Console;
 using CfgComparator.Writers;
+using CfgComparator.Models;
 
 namespace CfgComparator
 {
@@ -9,9 +10,7 @@ namespace CfgComparator
     {
         static void Main(string[] args)
         {
-            ConfigurationsComparator configurationsComparator = new();
             Output output = new(new ConsoleWriter());
-
             try
             {
                 string sourceFile = AnsiConsole.Ask<string>("Enter full [red]SOURCE[/] configuration file path (with .cfg): ");
@@ -20,7 +19,8 @@ namespace CfgComparator
                 string targetFile = AnsiConsole.Ask<string>("Enter full [red]TARGET[/] configuration file path (with .cfg): ");
                 var target = ConfigurationFileReader.ReadFromFile($"{targetFile}");
 
-                var configurationsCompareResult = configurationsComparator.Compare(source, target);
+                var configurationsCompareResult = new ConfigurationsCompareResult(source, target);
+                configurationsCompareResult.Differences = ConfigurationsComparator.Compare(source.Parameters, target.Parameters);
 
                 var menu = new Menu(configurationsCompareResult, output);
                 menu.MainMenu();

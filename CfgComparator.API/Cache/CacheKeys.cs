@@ -2,6 +2,7 @@
 {
     public static class CacheKeys
     {
-        public static string ConfigurationFileNames = "ConfigurationFileNames";
+        public static string Source = "Source";
+        public static string Target = "Target";
     }
 }

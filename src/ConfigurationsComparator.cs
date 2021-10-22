@@ -8,7 +8,7 @@ namespace CfgComparator
     /// <summary>
     /// Compares two configuration files.
     /// </summary>
-    public class ConfigurationsComparator
+    public static class ConfigurationsComparator
     {
         /// <summary>
         /// Compares two given <see cref="ConfigurationFile"/>.
@@ -16,29 +16,29 @@ namespace CfgComparator
         /// <param name="source">Source configuration file.</param>
         /// <param name="target">Target configuration file.</param>
         /// <returns>Returns <see cref="ConfigurationsCompareResult"/></returns>
-        public ConfigurationsCompareResult Compare(ConfigurationFile source, ConfigurationFile target)
+        public static List<ParameterDifference> Compare(List<Parameter> sourceParameters, List<Parameter> targetParameters)
         {
-            var configurationsCompareResult = new ConfigurationsCompareResult(source, target);
-            var allParameters = source.Parameters.Concat(target.Parameters).ToList();
+            List<ParameterDifference> parameterDifferences = new();
             List<Parameter> validatedParameters = new();
+            var allParameters = sourceParameters.Concat(targetParameters);
 
             foreach(var parameter in allParameters)
             {
-                var sourceParameter = source.Parameters.Find(x => x.Id == parameter.Id);
-                var targetParameter = target.Parameters.Find(x => x.Id == parameter.Id);
+                var sourceParameter = sourceParameters.Find(x => x.Id == parameter.Id);
+                var targetParameter = targetParameters.Find(x => x.Id == parameter.Id);
 
                 if(validatedParameters.Find(p => p.Id == parameter.Id) == null)
                 {
                     var parameterStatus = GetStatus(parameter, sourceParameter, targetParameter);
                     var parameterDifference = new ParameterDifference(parameter.Id, sourceParameter, targetParameter, parameterStatus);
-                    configurationsCompareResult.Differences.Add(parameterDifference);
+                    parameterDifferences.Add(parameterDifference);
                     validatedParameters.Add(parameter);
                 }
             }
-            return configurationsCompareResult;
+            return parameterDifferences;
         }
 
-        private ParameterStatus GetStatus(Parameter parameter, Parameter sourceParameter, Parameter targetParameter)
+        private static ParameterStatus GetStatus(Parameter parameter, Parameter sourceParameter, Parameter targetParameter)
         {
             if(targetParameter == null) 
             {

@@ -42,9 +42,9 @@ namespace CfgComparator.API.Controllers
         }
 
         [HttpGet("compare")]
-        public ActionResult<ConfigurationFiles> Compare()
+        public ActionResult<ConfigurationFilesResult> Compare()
         {
-            var configurationFiles = _fileService.ReturnFiles();
+            var configurationFiles = _fileService.CompareFiles();
             return configurationFiles == null ? BadRequest("Files were not uploaded!") : Ok(configurationFiles);
         }
     }
