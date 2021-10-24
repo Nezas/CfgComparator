@@ -12,14 +12,15 @@ namespace CfgComparator
     public static class ConfigurationFileReader
     {
         /// <summary>
-        /// Reads data from the given configuration file path.
+        /// Reads data from the configuration file with the given stream.
         /// </summary>
-        /// <param name="filePath">Configuration file path.</param>
+        /// <param name="fileName">Configuration file name.</param>
+        /// <param name="stream">File reading stream.</param>
         /// <returns>Returns <see cref="ConfigurationFile"/></returns>
-        public static ConfigurationFile ReadFromFile(string filePath, Stream stream)
+        public static ConfigurationFile ReadFromFile(string fileName, Stream stream)
         {
             string fileData = Read(stream);
-            ConfigurationFile configurationData = new(Path.GetFileName(filePath));
+            ConfigurationFile configurationData = new(fileName);
 
             foreach(var dataPair in fileData.Split(';'))
             {

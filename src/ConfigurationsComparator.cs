@@ -11,10 +11,10 @@ namespace CfgComparator
     public static class ConfigurationsComparator
     {
         /// <summary>
-        /// Compares two given <see cref="ConfigurationFile"/>.
+        /// Compares two lists of parameters.
         /// </summary>
-        /// <param name="source">Source configuration file.</param>
-        /// <param name="target">Target configuration file.</param>
+        /// <param name="sourceParameters">Source file parameters.</param>
+        /// <param name="targetParameters">Target file parameters.</param>
         /// <returns>Returns <see cref="ConfigurationsCompareResult"/></returns>
         public static List<ParameterDifference> Compare(List<Parameter> sourceParameters, List<Parameter> targetParameters)
         {
