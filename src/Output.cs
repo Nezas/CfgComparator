@@ -52,7 +52,7 @@ namespace CfgComparator
             {
                 Console.BackgroundColor = GetBackgroundColor(difference.Status);
                 Console.ForegroundColor = ConsoleColor.Black;
-                _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.Source.Value}", $"{difference.Target.Value}", $"{difference.Status}\n"));
+                _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.SourceValue}", $"{difference.TargetValue}", $"{difference.Status}\n"));
                 Console.ResetColor();
             }
         }
@@ -73,7 +73,7 @@ namespace CfgComparator
                     {
                         Console.BackgroundColor = GetBackgroundColor(difference.Status);
                         Console.ForegroundColor = ConsoleColor.Black;
-                        _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.Source.Value}", $"{difference.Target.Value}", $"{difference.Status}\n"));
+                        _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.SourceValue}", $"{difference.TargetValue}", $"{difference.Status}\n"));
                         Console.ResetColor();
                     }
                 }

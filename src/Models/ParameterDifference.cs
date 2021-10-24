@@ -8,15 +8,15 @@ namespace CfgComparator.Models
     public class ParameterDifference
     {
         public string Id { get; }
-        public Parameter Source { get; }
-        public Parameter Target { get; }
+        public string SourceValue { get; }
+        public string TargetValue { get; }
         public ParameterStatus Status { get; }
 
         public ParameterDifference(string id, Parameter source, Parameter target, ParameterStatus status)
         {
             Id = id;
-            Source = source ?? new Parameter(id, "");
-            Target = target ?? new Parameter(id, "");
+            SourceValue = source == null ? "" : source.Value;
+            TargetValue = target == null ? "" : target.Value;
             Status = status;
         }
     }
