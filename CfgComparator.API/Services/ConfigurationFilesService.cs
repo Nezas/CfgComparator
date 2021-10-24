@@ -76,5 +76,18 @@ namespace CfgComparator.API.Services
             }
             return parameterDifferences;
         }
+
+        public List<ParameterDifference> FilterById(string id)
+        {
+            var configurationFilesResult = _memoryCache.Get(CacheKeys.ConfigurationFilesResult);
+            if(configurationFilesResult == null)
+            {
+                return null;
+            }
+            var result = (ConfigurationFilesResult)configurationFilesResult;
+
+            var parameterDifferences = result.Parameters.FindAll(p => p.Id.StartsWith(id));
+            return parameterDifferences;
+        }
     }
 }

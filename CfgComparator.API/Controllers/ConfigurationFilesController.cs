@@ -49,10 +49,17 @@ namespace CfgComparator.API.Controllers
             return configurationFilesResult == null ? BadRequest("Files were not uploaded!") : Ok(configurationFilesResult);
         }
 
-        [HttpGet("filter/{status}")]
-        public ActionResult<List<ParameterDifference>> Filter(ParameterStatus status)
+        [HttpGet("filterStatus/{status}")]
+        public ActionResult<List<ParameterDifference>> FilterByStatus(ParameterStatus status)
         {
             var parameterDifferences = _fileService.FilterByStatus(status);
+            return parameterDifferences == null ? BadRequest("Files were not compared!") : Ok(parameterDifferences);
+        }
+
+        [HttpGet("filterId/{id}")]
+        public ActionResult<List<ParameterDifference>> FilterById(string id)
+        {
+            var parameterDifferences = _fileService.FilterById(id);
             return parameterDifferences == null ? BadRequest("Files were not compared!") : Ok(parameterDifferences);
         }
     }

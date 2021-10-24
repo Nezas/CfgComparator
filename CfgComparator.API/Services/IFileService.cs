@@ -11,5 +11,6 @@ namespace CfgComparator.API.Services
         bool UploadFiles(IFormFile sourceFile, IFormFile targetFile);
         ConfigurationFilesResult CompareFiles();
         List<ParameterDifference> FilterByStatus(ParameterStatus status);
+        List<ParameterDifference> FilterById(string id);
     }
 }
