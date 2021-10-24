@@ -13,11 +13,11 @@ namespace CfgComparator
             Output output = new(new ConsoleWriter());
             try
             {
-                string sourceFile = AnsiConsole.Ask<string>("Enter full [red]SOURCE[/] configuration file path (with .cfg): ");
-                var source = ConfigurationFileReader.ReadFromFile($"{sourceFile}");
+                string sourceFilePath = AnsiConsole.Ask<string>("Enter full [red]SOURCE[/] configuration file path (with .cfg): ");
+                var source = ConfigurationFileReader.ReadFromFile(Path.GetFileName(sourceFilePath), File.Open(sourceFilePath, FileMode.Open));
 
-                string targetFile = AnsiConsole.Ask<string>("Enter full [red]TARGET[/] configuration file path (with .cfg): ");
-                var target = ConfigurationFileReader.ReadFromFile($"{targetFile}");
+                string targetFilePath = AnsiConsole.Ask<string>("Enter full [red]TARGET[/] configuration file path (with .cfg): ");
+                var target = ConfigurationFileReader.ReadFromFile(Path.GetFileName(targetFilePath), File.Open(targetFilePath, FileMode.Open));
 
                 var configurationsCompareResult = new ConfigurationsCompareResult(source, target);
                 configurationsCompareResult.Differences = ConfigurationsComparator.Compare(source.Parameters, target.Parameters);

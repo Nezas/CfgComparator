@@ -45,12 +45,6 @@ namespace CfgComparator
             return configurationData;
         }
 
-        public static ConfigurationFile ReadFromFile(string filePath)
-        {
-            using(FileStream fileStream = File.Open(filePath, FileMode.Open))
-            return ReadFromFile(Path.GetFileName(filePath), fileStream);
-        }
-
         private static string Read(Stream stream)
         {
             using(GZipStream zip = new(stream, CompressionMode.Decompress))
