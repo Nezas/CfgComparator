@@ -1,15 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CfgComparator.Models;
 using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Caching.Memory;
-using CfgComparator.API.Cache;
+using System.Collections.Generic;
+using CfgComparator.Models;
 using CfgComparator.API.Models;
 using CfgComparator.API.Services;
 using CfgComparator.Enums;

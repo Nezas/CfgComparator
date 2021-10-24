@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using CfgComparator.API.Models;
 using System.Collections.Generic;
+using CfgComparator.API.Models;
 using CfgComparator.Models;
 using CfgComparator.Enums;
 

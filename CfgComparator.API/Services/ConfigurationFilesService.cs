@@ -1,12 +1,12 @@
-﻿using CfgComparator.API.Cache;
-using CfgComparator.API.Models;
-using CfgComparator.Enums;
-using CfgComparator.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using CfgComparator.Models;
+using CfgComparator.Enums;
+using CfgComparator.API.Models;
+using CfgComparator.API.Cache;
 
 namespace CfgComparator.API.Services
 {
@@ -45,12 +45,9 @@ namespace CfgComparator.API.Services
             var sourceFile = (ConfigurationFile)source;
             var targetFile = (ConfigurationFile)target;
 
-            var configurationsParameterDifferences = ConfigurationsComparator.Compare(sourceFile.Parameters, targetFile.Parameters);
-            var configurationsInfoParameterDifferences = ConfigurationsComparator.Compare(sourceFile.InfoParameters, targetFile.InfoParameters);
-
             var configurationFilesResult = new ConfigurationFilesResult(sourceFile.Name, targetFile.Name);
-            configurationFilesResult.InfoParameters = configurationsInfoParameterDifferences;
-            configurationFilesResult.Parameters = configurationsParameterDifferences;
+            configurationFilesResult.Parameters = ConfigurationsComparator.Compare(sourceFile.Parameters, targetFile.Parameters);
+            configurationFilesResult.InfoParameters = ConfigurationsComparator.Compare(sourceFile.InfoParameters, targetFile.InfoParameters);
 
             _memoryCache.Set(CacheKeys.ConfigurationFilesResult, configurationFilesResult, TimeSpan.FromMinutes(30));
 
