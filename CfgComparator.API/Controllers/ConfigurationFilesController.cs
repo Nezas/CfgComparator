@@ -12,6 +12,7 @@ using Microsoft.Extensions.Caching.Memory;
 using CfgComparator.API.Cache;
 using CfgComparator.API.Models;
 using CfgComparator.API.Services;
+using CfgComparator.Enums;
 
 namespace CfgComparator.API.Controllers
 {
@@ -44,8 +45,15 @@ namespace CfgComparator.API.Controllers
         [HttpGet("compare")]
         public ActionResult<ConfigurationFilesResult> Compare()
         {
-            var configurationFiles = _fileService.CompareFiles();
-            return configurationFiles == null ? BadRequest("Files were not uploaded!") : Ok(configurationFiles);
+            var configurationFilesResult = _fileService.CompareFiles();
+            return configurationFilesResult == null ? BadRequest("Files were not uploaded!") : Ok(configurationFilesResult);
+        }
+
+        [HttpGet("filter/{status}")]
+        public ActionResult<List<ParameterDifference>> Filter(ParameterStatus status)
+        {
+            var parameterDifferences = _fileService.FilterByStatus(status);
+            return parameterDifferences == null ? BadRequest("Files were not compared!") : Ok(parameterDifferences);
         }
     }
 }

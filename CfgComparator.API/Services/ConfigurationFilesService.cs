@@ -1,9 +1,11 @@
 ﻿using CfgComparator.API.Cache;
 using CfgComparator.API.Models;
+using CfgComparator.Enums;
 using CfgComparator.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CfgComparator.API.Services
@@ -36,12 +38,10 @@ namespace CfgComparator.API.Services
         {
             var source = _memoryCache.Get(CacheKeys.Source);
             var target = _memoryCache.Get(CacheKeys.Target);
-
             if(source == null || target == null)
             {
                 return null;
             }
-
             var sourceFile = (ConfigurationFile)source;
             var targetFile = (ConfigurationFile)target;
 
@@ -52,7 +52,29 @@ namespace CfgComparator.API.Services
             configurationFilesResult.InfoParameters = configurationsInfoParameterDifferences;
             configurationFilesResult.Parameters = configurationsParameterDifferences;
 
+            _memoryCache.Set(CacheKeys.ConfigurationFilesResult, configurationFilesResult, TimeSpan.FromMinutes(30));
+
             return configurationFilesResult;
+        }
+
+        public List<ParameterDifference> FilterByStatus(ParameterStatus status)
+        {
+            var configurationFilesResult = _memoryCache.Get(CacheKeys.ConfigurationFilesResult);
+            if(configurationFilesResult == null)
+            {
+                return null;
+            }
+            var result = (ConfigurationFilesResult)configurationFilesResult;
+
+            var parameterDifferences = new List<ParameterDifference>();
+            foreach(var parameter in result.Parameters)
+            {
+                if(parameter.Status == status)
+                {
+                    parameterDifferences.Add(parameter);
+                }
+            }
+            return parameterDifferences;
         }
     }
 }
