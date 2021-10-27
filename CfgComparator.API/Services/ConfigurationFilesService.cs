@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using CfgComparator.Models;
 using CfgComparator.Enums;
 using CfgComparator.API.Models;
@@ -18,8 +18,8 @@ namespace CfgComparator.API.Services
         {
             _memoryCache = memoryCache;
         }
-
-        public bool UploadFiles(IFormFile sourceFile, IFormFile targetFile)
+        
+        public bool UploadAndCompareFiles(IFormFile sourceFile, IFormFile targetFile)
         {
             if(Path.GetExtension(sourceFile.FileName) != ".cfg" || Path.GetExtension(targetFile.FileName) != ".cfg")
             {
@@ -28,30 +28,24 @@ namespace CfgComparator.API.Services
 
             var source = ConfigurationFileReader.ReadFromFile(sourceFile.FileName, sourceFile.OpenReadStream());
             var target = ConfigurationFileReader.ReadFromFile(targetFile.FileName, targetFile.OpenReadStream());
-            _memoryCache.Set(CacheKeys.Source, source, TimeSpan.FromMinutes(30));
-            _memoryCache.Set(CacheKeys.Target, target, TimeSpan.FromMinutes(30));
 
+            Thread thread = new(() => Compare(source, target));
+            thread.Start();
             return true;
         }
 
-        public ConfigurationFilesResult CompareFiles()
+        public void Compare(ConfigurationFile source, ConfigurationFile target)
         {
-            var source = _memoryCache.Get(CacheKeys.Source);
-            var target = _memoryCache.Get(CacheKeys.Target);
-            if(source == null || target == null)
-            {
-                return null;
-            }
-            var sourceFile = (ConfigurationFile)source;
-            var targetFile = (ConfigurationFile)target;
+            var configurationFilesResult = new ConfigurationFilesResult(source.Name, target.Name);
+            configurationFilesResult.Parameters = ConfigurationsComparator.Compare(source.Parameters, target.Parameters);
+            configurationFilesResult.InfoParameters = ConfigurationsComparator.Compare(source.InfoParameters, target.InfoParameters);
+            _memoryCache.Set(CacheKeys.ConfigurationFilesResult, configurationFilesResult);
+        }
 
-            var configurationFilesResult = new ConfigurationFilesResult(sourceFile.Name, targetFile.Name);
-            configurationFilesResult.Parameters = ConfigurationsComparator.Compare(sourceFile.Parameters, targetFile.Parameters);
-            configurationFilesResult.InfoParameters = ConfigurationsComparator.Compare(sourceFile.InfoParameters, targetFile.InfoParameters);
-
-            _memoryCache.Set(CacheKeys.ConfigurationFilesResult, configurationFilesResult, TimeSpan.FromMinutes(30));
-
-            return configurationFilesResult;
+        public ConfigurationFilesResult GetCompareResult()
+        {
+            var result = _memoryCache.Get(CacheKeys.ConfigurationFilesResult);
+            return (ConfigurationFilesResult)result;
         }
 
         public List<ParameterDifference> FilterByStatus(ParameterStatus status)
@@ -61,9 +55,10 @@ namespace CfgComparator.API.Services
             {
                 return null;
             }
-            var result = (ConfigurationFilesResult)configurationFilesResult;
 
+            var result = (ConfigurationFilesResult)configurationFilesResult;
             var parameterDifferences = new List<ParameterDifference>();
+
             foreach(var parameter in result.Parameters)
             {
                 if(parameter.Status == status)

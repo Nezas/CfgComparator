@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using CfgComparator.Models;
-using CfgComparator.API.Models;
-using CfgComparator.API.Services;
 using CfgComparator.Enums;
+using CfgComparator.API.Services;
+using CfgComparator.API.Models;
 
 namespace CfgComparator.API.Controllers
 {
@@ -26,7 +26,7 @@ namespace CfgComparator.API.Controllers
             {
                 return BadRequest("Both files should be uploaded!");
             }
-            if(_fileService.UploadFiles(sourceFile, targetFile) == false)
+            if(_fileService.UploadAndCompareFiles(sourceFile, targetFile) == false)
             {
                 return BadRequest("Only \".cfg\" files are supported!");
             }
@@ -34,25 +34,25 @@ namespace CfgComparator.API.Controllers
             return Ok("Files were successfully uploaded!");
         }
 
-        [HttpGet("compare")]
-        public ActionResult<ConfigurationFilesResult> Compare()
+        [HttpGet("result")]
+        public ActionResult<ConfigurationFilesResult> Result()
         {
-            var configurationFilesResult = _fileService.CompareFiles();
-            return configurationFilesResult == null ? BadRequest("Files were not uploaded!") : Ok(configurationFilesResult);
+            var result = _fileService.GetCompareResult();
+            return result == null ? BadRequest("Files were not uploaded yet!") : Ok(result);
         }
 
         [HttpGet("filterStatus/{status}")]
         public ActionResult<List<ParameterDifference>> FilterByStatus(ParameterStatus status)
         {
             var parameterDifferences = _fileService.FilterByStatus(status);
-            return parameterDifferences == null ? BadRequest("Files were not compared!") : Ok(parameterDifferences);
+            return parameterDifferences == null ? BadRequest("Files were not uploaded yet!") : Ok(parameterDifferences);
         }
 
         [HttpGet("filterId/{id}")]
         public ActionResult<List<ParameterDifference>> FilterById(string id)
         {
             var parameterDifferences = _fileService.FilterById(id);
-            return parameterDifferences == null ? BadRequest("Files were not compared!") : Ok(parameterDifferences);
+            return parameterDifferences == null ? BadRequest("Files were not uploaded yet!") : Ok(parameterDifferences);
         }
     }
 }
