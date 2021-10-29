@@ -8,10 +8,11 @@ namespace CfgComparator.API.Services
 {
     public interface IFileService
     {
-        bool UploadAndCompareFiles(IFormFile sourceFile, IFormFile targetFile);
+        void ReadAndCompareFiles(IFormFile sourceFile, IFormFile targetFile);
         void Compare(ConfigurationFile source, ConfigurationFile target);
-        ConfigurationFilesResult GetCompareResult();
-        List<ParameterDifference> FilterByStatus(ParameterStatus status);
-        List<ParameterDifference> FilterById(string id);
+        void SaveCompareResult(string sourceName, string targetName, ConfigurationFilesResult configurationFilesResult);
+        ConfigurationFilesResult GetCompareResult(string sourceName, string targetName);
+        List<ParameterDifference> FilterByStatus(string sourceName, string targetName, ParameterStatus status);
+        List<ParameterDifference> FilterById(string sourceName, string targetName, string id);
     }
 }

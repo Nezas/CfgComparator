@@ -5,6 +5,7 @@
 
 # Sensitive data
 src/CfgData
+CfgComparator.API/Files
 
 # User-specific files
 *.rsuser

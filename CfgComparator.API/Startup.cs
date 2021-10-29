@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using System;
 using CfgComparator.API.Services;
 
 namespace CfgComparator.API
@@ -30,7 +31,13 @@ namespace CfgComparator.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CfgComparator.API", Version = "v1" });
             });
-            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddScoped<IFileService, ConfigurationFilesService>();
         }
 
@@ -51,6 +58,8 @@ namespace CfgComparator.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 

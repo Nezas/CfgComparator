@@ -12,11 +12,11 @@ namespace CfgComparator.Models
         public string TargetValue { get; }
         public ParameterStatus Status { get; }
 
-        public ParameterDifference(string id, Parameter source, Parameter target, ParameterStatus status)
+        public ParameterDifference(string id, string sourceValue, string targetValue, ParameterStatus status)
         {
             Id = id;
-            SourceValue = source == null ? "" : source.Value;
-            TargetValue = target == null ? "" : target.Value;
+            SourceValue = sourceValue ?? "";
+            TargetValue = targetValue ?? "";
             Status = status;
         }
     }

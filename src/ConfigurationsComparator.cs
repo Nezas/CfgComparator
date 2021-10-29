@@ -29,31 +29,29 @@ namespace CfgComparator
 
                 if(validatedParameters.Find(p => p.Id == parameter.Id) == null)
                 {
-                    var parameterStatus = GetStatus(parameter, sourceParameter, targetParameter);
-                    var parameterDifference = new ParameterDifference(parameter.Id, sourceParameter, targetParameter, parameterStatus);
-                    parameterDifferences.Add(parameterDifference);
+                    parameterDifferences.Add(GetParameterDifference(parameter, sourceParameter, targetParameter));
                     validatedParameters.Add(parameter);
                 }
             }
             return parameterDifferences;
         }
 
-        private static ParameterStatus GetStatus(Parameter parameter, Parameter sourceParameter, Parameter targetParameter)
+        private static ParameterDifference GetParameterDifference(Parameter parameter, Parameter sourceParameter, Parameter targetParameter)
         {
             if(targetParameter == null) 
             {
-                return ParameterStatus.Removed;
+                return new ParameterDifference(parameter.Id, sourceParameter.Value, null, ParameterStatus.Removed);
             }
             else if(sourceParameter == null)
             {
-                return ParameterStatus.Added;
+                return new ParameterDifference(parameter.Id, null, targetParameter.Value, ParameterStatus.Added);
             }
 
             if(sourceParameter.Value == targetParameter.Value)
             {
-                return ParameterStatus.Unchanged;
+                return new ParameterDifference(parameter.Id, sourceParameter.Value, targetParameter.Value, ParameterStatus.Unchanged);
             }
-            return ParameterStatus.Modified;
+            return new ParameterDifference(parameter.Id, sourceParameter.Value, targetParameter.Value, ParameterStatus.Modified);
         }
     }
 }
