@@ -6,6 +6,7 @@ using CfgComparator.Models;
 using CfgComparator.Enums;
 using CfgComparator.API.Services;
 using CfgComparator.API.Models;
+using CfgComparator.Readers;
 
 namespace CfgComparator.API.Controllers
 {
@@ -14,10 +15,12 @@ namespace CfgComparator.API.Controllers
     public class ConfigurationFilesController : ControllerBase
     {
         private readonly IFileService _fileService;
+        private readonly IFileReader _fileReader;
 
-        public ConfigurationFilesController(IFileService fileService)
+        public ConfigurationFilesController(IFileService fileService, IFileReader fileReader)
         {
             _fileService = fileService;
+            _fileReader = fileReader;
         }
 
         [HttpPost("upload")]
@@ -31,7 +34,7 @@ namespace CfgComparator.API.Controllers
             {
                 return BadRequest("Only \".cfg\" files are supported!");
             }
-            _fileService.ReadAndCompareFiles(sourceFile, targetFile);
+            _fileService.ReadAndCompareFiles(sourceFile, targetFile, _fileReader);
 
             var session = HttpContext.Session;
             session.SetString("SourceFileName", sourceFile.FileName);

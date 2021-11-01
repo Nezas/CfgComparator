@@ -1,15 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using CfgComparator.Models;
 
-namespace CfgComparator
+namespace CfgComparator.Readers
 {
     /// <summary>
     /// Reads configuration file data.
     /// </summary>
-    public static class ConfigurationFileReader
+    public class ConfigurationFileReader : IFileReader
     {
         /// <summary>
         /// Reads data from the configuration file with the given stream.
@@ -17,7 +16,7 @@ namespace CfgComparator
         /// <param name="fileName">Configuration file name.</param>
         /// <param name="stream">File reading stream.</param>
         /// <returns>Returns <see cref="ConfigurationFile"/></returns>
-        public static ConfigurationFile ReadFromFile(string fileName, Stream stream)
+        public ConfigurationFile ReadFromFile(string fileName, Stream stream)
         {
             string fileData = Read(stream);
             ConfigurationFile configurationData = new(fileName);
@@ -45,7 +44,7 @@ namespace CfgComparator
             return configurationData;
         }
 
-        private static string Read(Stream stream)
+        private string Read(Stream stream)
         {
             using(GZipStream zip = new(stream, CompressionMode.Decompress))
             using(StreamReader unzip = new(zip))

@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Newtonsoft.Json;
 using CfgComparator.Models;
 using CfgComparator.Enums;
+using CfgComparator.Readers;
 using CfgComparator.API.Models;
-using Newtonsoft.Json;
 
 namespace CfgComparator.API.Services
 {
     public class ConfigurationFilesService : IFileService
     {
-        public void ReadAndCompareFiles(IFormFile sourceFile, IFormFile targetFile)
+        public void ReadAndCompareFiles(IFormFile sourceFile, IFormFile targetFile, IFileReader fileReader)
         {
-            var source = ConfigurationFileReader.ReadFromFile(sourceFile.FileName, sourceFile.OpenReadStream());
-            var target = ConfigurationFileReader.ReadFromFile(targetFile.FileName, targetFile.OpenReadStream());
+            var source = fileReader.ReadFromFile(sourceFile.FileName, sourceFile.OpenReadStream());
+            var target = fileReader.ReadFromFile(targetFile.FileName, targetFile.OpenReadStream());
 
             Thread thread = new(() => Compare(source, target));
             thread.Start();
@@ -37,9 +38,9 @@ namespace CfgComparator.API.Services
 
         public ConfigurationFilesResult GetCompareResult(string sourceName, string targetName)
         {
-            string json = "Files/" + sourceName + "_" + targetName + ".json";
-            string jsonValue = File.ReadAllText(json);
-            var result = JsonConvert.DeserializeObject<ConfigurationFilesResult>(jsonValue);
+            string resultPath = "Files/" + sourceName + "_" + targetName + ".json";
+            string resultValue = File.ReadAllText(resultPath);
+            var result = JsonConvert.DeserializeObject<ConfigurationFilesResult>(resultValue);
             return result;
         }
 

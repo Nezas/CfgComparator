@@ -5,7 +5,7 @@ using CfgComparator.Models;
 using CfgComparator.Writers;
 using CfgComparator.Enums;
 
-namespace CfgComparator
+namespace CfgComparator.UI
 {
     /// <summary>
     /// Writes <see cref="ConfigurationFile"/> parameters using given <see cref="IWriter"/>.
@@ -47,38 +47,43 @@ namespace CfgComparator
         /// <param name="parameterDifferences"></param>
         public void Parameters(List<ParameterDifference> parameterDifferences)
         {
-            _writer.Write(String.Format("\n{0,-10}   {1,-30}   {2,-30}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
+            _writer.Write(String.Format("{0,-10}   {1,-30}   {2,-30}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
             foreach(var difference in parameterDifferences)
             {
-                Console.BackgroundColor = GetBackgroundColor(difference.Status);
-                Console.ForegroundColor = ConsoleColor.Black;
-                _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.SourceValue}", $"{difference.TargetValue}", $"{difference.Status}\n"));
-                Console.ResetColor();
+                PrintParameterDifference(difference);
             }
         }
 
         /// <summary>
         /// Writes compared parameters.
         /// </summary>
-        /// <param name="configurationsCompareResult"></param>
+        /// <param name="parameterDifferences"></param>
         /// <param name="parameterStatus"></param>
-        public void Parameters(ConfigurationsCompareResult configurationsCompareResult, List<ParameterStatus> parameterStatus)
+        public void Parameters(List<ParameterDifference> parameterDifferences, List<ParameterStatus> parameterStatus)
         {
             _writer.Write(String.Format("{0,-10}   {1,-30}   {2,-30}   {3,6}", "ID", "Source Value", "Target Value", "Status\n"));
-            foreach(var difference in configurationsCompareResult.Differences)
+            foreach(var difference in parameterDifferences)
             {
                 foreach(var status in parameterStatus)
                 {
                     if(status == difference.Status)
                     {
-                        Console.BackgroundColor = GetBackgroundColor(difference.Status);
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.SourceValue}", $"{difference.TargetValue}", $"{difference.Status}\n"));
-                        Console.ResetColor();
+                        PrintParameterDifference(difference);
                     }
                 }
-
             }
+        }
+
+        /// <summary>
+        /// Prints parameter difference.
+        /// </summary>
+        /// <param name="difference"></param>
+        private void PrintParameterDifference(ParameterDifference difference)
+        {
+            Console.BackgroundColor = GetBackgroundColor(difference.Status);
+            Console.ForegroundColor = ConsoleColor.Black;
+            _writer.Write(String.Format("{0,-10} | {1,-30} | {2,-30} | {3,6}", $"{difference.Id}", $"{difference.SourceValue}", $"{difference.TargetValue}", $"{difference.Status}\n"));
+            Console.ResetColor();
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using System;
 using CfgComparator.API.Services;
+using CfgComparator.Readers;
 
 namespace CfgComparator.API
 {
@@ -39,6 +40,7 @@ namespace CfgComparator.API
                 options.Cookie.IsEssential = true;
             });
             services.AddScoped<IFileService, ConfigurationFilesService>();
+            services.AddScoped<IFileReader, ConfigurationFileReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
