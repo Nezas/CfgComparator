@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Linq;
 using Newtonsoft.Json;
 using CfgComparator.Models;
 using CfgComparator.Enums;
@@ -44,35 +45,14 @@ namespace CfgComparator.API.Services
             return result;
         }
 
-        public List<ParameterDifference> FilterByStatus(string sourceName, string targetName, ParameterStatus status)
+        public IEnumerable<ParameterDifference> FilterByStatus(ConfigurationFilesResult result, ParameterStatus status)
         {
-            var configurationFilesResult = GetCompareResult(sourceName, targetName);
-            if(configurationFilesResult == null)
-            {
-                return null;
-            }
-
-            var parameterDifferences = new List<ParameterDifference>();
-            foreach(var parameter in configurationFilesResult.Parameters)
-            {
-                if(parameter.Status == status)
-                {
-                    parameterDifferences.Add(parameter);
-                }
-            }
-            return parameterDifferences;
+            return result.Parameters.Where(parameter => parameter.Status == status);
         }
 
-        public List<ParameterDifference> FilterById(string sourceName, string targetName, string id)
+        public IEnumerable<ParameterDifference> FilterById(ConfigurationFilesResult result, string id)
         {
-            var configurationFilesResult = GetCompareResult(sourceName, targetName);
-            if(configurationFilesResult == null)
-            {
-                return null;
-            }
-
-            var parameterDifferences = configurationFilesResult.Parameters.FindAll(p => p.Id.StartsWith(id));
-            return parameterDifferences;
+            return result.Parameters.FindAll(p => p.Id.StartsWith(id));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace CfgComparator.API.Services
         void Compare(ConfigurationFile source, ConfigurationFile target);
         void SaveCompareResult(string sourceName, string targetName, ConfigurationFilesResult configurationFilesResult);
         ConfigurationFilesResult GetCompareResult(string sourceName, string targetName);
-        List<ParameterDifference> FilterByStatus(string sourceName, string targetName, ParameterStatus status);
-        List<ParameterDifference> FilterById(string sourceName, string targetName, string id);
+        IEnumerable<ParameterDifference> FilterByStatus(ConfigurationFilesResult result, ParameterStatus status);
+        IEnumerable<ParameterDifference> FilterById(ConfigurationFilesResult result, string id);
     }
 }

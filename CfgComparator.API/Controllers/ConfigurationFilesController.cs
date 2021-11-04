@@ -46,25 +46,35 @@ namespace CfgComparator.API.Controllers
         [HttpGet("result")]
         public ActionResult<ConfigurationFilesResult> Result()
         {
-            var session = HttpContext.Session;
-            var result = _fileService.GetCompareResult(session.GetString("SourceFileName"), session.GetString("TargetFileName"));
-            return result == null ? BadRequest("Files were not uploaded yet!") : Ok(result);
+            var result = GetSessionResult();
+            return result is null ? BadRequest("Files were not found!") : Ok(result);
         }
 
         [HttpGet("filterStatus/{status}")]
         public ActionResult<List<ParameterDifference>> FilterByStatus(ParameterStatus status)
         {
-            var session = HttpContext.Session;
-            var parameterDifferences = _fileService.FilterByStatus(session.GetString("SourceFileName"), session.GetString("TargetFileName"), status);
-            return parameterDifferences == null ? BadRequest("Files were not uploaded yet!") : Ok(parameterDifferences);
+            var result = GetSessionResult();
+            return result is null ? BadRequest("Files were not found!") : Ok(_fileService.FilterByStatus(result, status));
         }
 
         [HttpGet("filterId/{id}")]
         public ActionResult<List<ParameterDifference>> FilterById(string id)
         {
+            var result = GetSessionResult();
+            return result is null ? BadRequest("Files were not found!") : Ok(_fileService.FilterById(result, id));
+        }
+
+        private ConfigurationFilesResult GetSessionResult()
+        {
             var session = HttpContext.Session;
-            var parameterDifferences = _fileService.FilterById(session.GetString("SourceFileName"), session.GetString("TargetFileName"), id);
-            return parameterDifferences == null ? BadRequest("Files were not uploaded yet!") : Ok(parameterDifferences);
+            try
+            {
+                return _fileService.GetCompareResult(session.GetString("SourceFileName"), session.GetString("TargetFileName"));
+            }
+            catch(FileNotFoundException)
+            {
+                return null;
+            }
         }
     }
 }

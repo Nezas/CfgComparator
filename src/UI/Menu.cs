@@ -99,6 +99,5 @@ namespace CfgComparator.UI
             Console.ReadKey();
             MainMenu();
         }
-
     }
 }
